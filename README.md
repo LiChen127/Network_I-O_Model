@@ -1,20 +1,26 @@
-# 用Node.js Java Go模拟常见的Linux网络I/O并发模型
+# 模拟常见的Linux网络I/O并发模型
+
+## 目标实现
+
+1. Node.js
+2. Java
+3. Go
 
 ## 目标模型
 
-1. 单线程Accept(无 I/O复用)
-2. 单线程Accept + 多线程读写业务(无 I/O复用)
+1. 单线程Accept(无I/O复用)
+2. 单线程Accept + 多线程读写业务(无I/O复用)
 3. 单线程多路I/O复用
 4. 单线程多路I/O复用 + 多线程读写业务(业务工作池)
 5. 单线程I/O复用 + 多线程I/O复用(连接线程池)
-6. (进程版): 单进程多线程I/O复用 + 多进程程I/O复用
+6. (进程版): 单进程多线程I/O复用 + 多进程I/O复用
 
 ### 单线程Accept(无I/O复用)
 
 - 原理: 单线程顺序处理连接的接受和读写操作，同一时间只能处理一个连接请求或读写操作
 - 实现思路:
-  - Node.js: `net`模块创建TCP服务器，在单个事件循环中处理所有的连接；
-  - Java: `ServerSocket`监听端口，通过`Socket`处理连接；
+  - Node.js: `net`模块创建TCP服务器，在单个事件循环中处理所有的连接;
+  - Java: `ServerSocket`监听端口，通过`Socket`处理连接;
   - Go: `net.Listen`创建监听套接字，在主goroutine中处理连接。
 
 ### 单线程Accept + 多线程读写业务(无I/O复用)
@@ -45,8 +51,8 @@
 
 - 原理: 创建连接线程池，每个线程使用I/O复用技术处理一部分连接
 - 实现思路:
-  - Node.js: 使用多个`net`服务器实例，每个实例在独立的线程中运行;
-  - Java: 创建多个`Selector`线程，每个线程处理一部分连接;
+  - Node.js: 使用多个`net`服务器实例，每个实例在独立的线程中运行；
+  - Java: 创建多个`Selector`线程，每个线程处理一部分连接；
   - Go: 启动多个 goroutine，每个 goroutine 监听一部分连接。
 
 ### (进程版): 单进程多线程I/O复用 + 多进程I/O复用
@@ -54,8 +60,8 @@
 - 原理: 使用多进程和多线程结合I/O复用技术处理连接
 - 实现思路:
   - Node.js: 使用`cluster`模块创建多个进程，每个进程内部使用多线程处理；
-  - Java: 使用`ProcessBuilder`创建多个进程，每个进程内部使用线程池和Selector
-  - Go: 使用`os/exec`启动多个进程，每个进程内部使用gorountine处理
+  - Java: 使用`ProcessBuilder`创建多个进程，每个进程内部使用线程池和Selector；
+  - Go: 使用`os/exec`启动多个进程，每个进程内部使用gorountine处理。
 
 ## 测试指标
 
