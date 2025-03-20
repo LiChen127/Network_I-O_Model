@@ -48,7 +48,6 @@ export class SingleThreadServer {
     this.server.close(() => {
       logger.info('服务器已停止');
       const stats = this.metrics.getStats();
-      // const result = 
       logger.info('性能统计:', stats);
     });
   }

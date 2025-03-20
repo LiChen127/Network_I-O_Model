@@ -8,6 +8,13 @@ import { logger } from '../utils/logger';
 const PORT = 3000;
 const HOST = 'localhost';
 
+/**
+ * 等待服务器启动
+ * @param host 
+ * @param port 
+ * @param maxAttempts 尝试次数
+ * @returns 
+ */
 async function waitForServer(host: string, port: number, maxAttempts: number = 10): Promise<boolean> {
   for (let i = 0; i < maxAttempts; i++) {
     try {
